@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FiveM Anti-Cheat Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-shield-alt"></i> FiveM Anti-Cheat</h1>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="onlinePlayers">0</span>
+                        <span class="stat-label">Online Players</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="activeBans">0</span>
+                        <span class="stat-label">Active Bans</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="recentViolations">0</span>
+                        <span class="stat-label">Recent Violations</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <button class="nav-btn active" data-tab="dashboard">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </button>
+            <button class="nav-btn" data-tab="bans">
+                <i class="fas fa-ban"></i> Bans
+            </button>
+            <button class="nav-btn" data-tab="violations">
+                <i class="fas fa-exclamation-triangle"></i> Violations
+            </button>
+            <button class="nav-btn" data-tab="players">
+                <i class="fas fa-users"></i> Players
+            </button>
+            <button class="nav-btn" data-tab="settings">
+                <i class="fas fa-cog"></i> Settings
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard">
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3><i class="fas fa-chart-line"></i> Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h4>Total Bans</h4>
+                                <span class="big-number" id="totalBans">0</span>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Auto Bans</h4>
+                                <span class="big-number" id="autoBans">0</span>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Manual Bans</h4>
+                                <span class="big-number" id="manualBans">0</span>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Total Violations</h4>
+                                <span class="big-number" id="totalViolations">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-clock"></i> Recent Activity</h3>
+                        <div class="activity-list" id="recentActivity">
+                            <div class="loading">Loading recent activity...</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-server"></i> Server Status</h3>
+                        <div class="server-status">
+                            <div class="status-item">
+                                <span>Anti-Cheat Status</span>
+                                <span class="status-badge online">Online</span>
+                            </div>
+                            <div class="status-item">
+                                <span>Database Connection</span>
+                                <span class="status-badge online">Connected</span>
+                            </div>
+                            <div class="status-item">
+                                <span>Global Sync</span>
+                                <span class="status-badge online">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bans Tab -->
+            <div class="tab-content" id="bans">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-ban"></i> Ban Management</h3>
+                        <button class="btn btn-primary" id="addBanBtn">
+                            <i class="fas fa-plus"></i> Add Ban
+                        </button>
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" id="banSearch" placeholder="Search bans...">
+                        <select id="banFilter">
+                            <option value="all">All Bans</option>
+                            <option value="active">Active</option>
+                            <option value="expired">Expired</option>
+                            <option value="auto">Auto</option>
+                            <option value="manual">Manual</option>
+                        </select>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="bansTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>License</th>
+                                    <th>Reason</th>
+                                    <th>Duration</th>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="7" class="loading">Loading bans...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Violations Tab -->
+            <div class="tab-content" id="violations">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Violation Log</h3>
+                        <button class="btn btn-secondary" id="clearViolationsBtn">
+                            <i class="fas fa-trash"></i> Clear Old
+                        </button>
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" id="violationSearch" placeholder="Search violations...">
+                        <select id="violationFilter">
+                            <option value="all">All Types</option>
+                            <option value="speed_hack">Speed Hack</option>
+                            <option value="health_hack">Health Hack</option>
+                            <option value="teleport">Teleport</option>
+                            <option value="weapon_mod">Weapon Mod</option>
+                            <option value="aimbot">Aimbot</option>
+                        </select>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="violationsTable">
+                            <thead>
+                                <tr>
+                                    <th>Player</th>
+                                    <th>Type</th>
+                                    <th>Details</th>
+                                    <th>Count</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="loading">Loading violations...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Players Tab -->
+            <div class="tab-content" id="players">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-users"></i> Online Players</h3>
+                        <button class="btn btn-secondary" id="refreshPlayersBtn">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" id="playerSearch" placeholder="Search players...">
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="playersTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>License</th>
+                                    <th>Steam</th>
+                                    <th>Ping</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="loading">Loading players...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div class="tab-content" id="settings">
+                <div class="card">
+                    <h3><i class="fas fa-cog"></i> Anti-Cheat Settings</h3>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label for="detectionEnabled">Detection System</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="detectionEnabled" checked>
+                                <span class="slider"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="autoBanEnabled">Auto-Ban System</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="autoBanEnabled" checked>
+                                <span class="slider"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="globalBanEnabled">Global Ban Sync</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="globalBanEnabled" checked>
+                                <span class="slider"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="maxViolations">Max Violations Before Ban</label>
+                            <input type="number" id="maxViolations" value="3" min="1" max="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="banDuration">Default Ban Duration (hours)</label>
+                            <input type="number" id="banDuration" value="24" min="1" max="8760">
+                        </div>
+                        <button class="btn btn-primary" id="saveSettingsBtn">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Add/Edit Ban -->
+    <div class="modal" id="banModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Ban</h3>
+                <button class="modal-close" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="banForm">
+                    <div class="form-group">
+                        <label for="banLicense">License</label>
+                        <input type="text" id="banLicense" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="banSteam">Steam ID (optional)</label>
+                        <input type="text" id="banSteam">
+                    </div>
+                    <div class="form-group">
+                        <label for="banDiscord">Discord ID (optional)</label>
+                        <input type="text" id="banDiscord">
+                    </div>
+                    <div class="form-group">
+                        <label for="banReason">Reason</label>
+                        <textarea id="banReason" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="banDuration">Duration (hours)</label>
+                        <select id="banDuration">
+                            <option value="1">1 Hour</option>
+                            <option value="6">6 Hours</option>
+                            <option value="24">1 Day</option>
+                            <option value="168">1 Week</option>
+                            <option value="720">1 Month</option>
+                            <option value="8760">Permanent</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Ban</button>
+                        <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

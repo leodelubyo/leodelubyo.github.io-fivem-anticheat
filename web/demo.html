@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FiveM Anti-Cheat Dashboard - Demo</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .demo-notice {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+        }
+        .demo-badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Demo Notice -->
+        <div class="demo-notice">
+            <h3><i class="fas fa-flask"></i> Demo Mode <span class="demo-badge">OFFLINE</span></h3>
+            <p>This is a demo version running without a server. Some features are simulated.</p>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-shield-alt"></i> FiveM Anti-Cheat</h1>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="onlinePlayers">42</span>
+                        <span class="stat-label">Online Players</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="activeBans">156</span>
+                        <span class="stat-label">Active Bans</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="recentViolations">23</span>
+                        <span class="stat-label">Recent Violations</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <button class="nav-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </button>
+            <button class="nav-btn" data-tab="bans" onclick="switchTab('bans')">
+                <i class="fas fa-ban"></i> Bans
+            </button>
+            <button class="nav-btn" data-tab="violations" onclick="switchTab('violations')">
+                <i class="fas fa-exclamation-triangle"></i> Violations
+            </button>
+            <button class="nav-btn" data-tab="players" onclick="switchTab('players')">
+                <i class="fas fa-users"></i> Players
+            </button>
+            <button class="nav-btn" data-tab="settings" onclick="switchTab('settings')">
+                <i class="fas fa-cog"></i> Settings
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard">
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3><i class="fas fa-chart-line"></i> Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h4>Total Bans</h4>
+                                <span class="big-number" id="totalBans">1,247</span>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Auto Bans</h4>
+                                <span class="big-number" id="autoBans">892</span>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Manual Bans</h4>
+                                <span class="big-number" id="manualBans">355</span>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Total Violations</h4>
+                                <span class="big-number" id="totalViolations">3,421</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-clock"></i> Recent Activity</h3>
+                        <div class="activity-list" id="recentActivity">
+                            <div class="activity-item">
+                                <div>
+                                    <strong>Ban Added</strong>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                        Speed hacking - JohnDoe
+                                    </div>
+                                </div>
+                                <div class="activity-time">5 min ago</div>
+                            </div>
+                            <div class="activity-item">
+                                <div>
+                                    <strong>Violation Detected</strong>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                        Speed hack - Player123
+                                    </div>
+                                </div>
+                                <div class="activity-time">10 min ago</div>
+                            </div>
+                            <div class="activity-item">
+                                <div>
+                                    <strong>System Update</strong>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                        Global ban sync completed
+                                    </div>
+                                </div>
+                                <div class="activity-time">15 min ago</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-server"></i> Server Status</h3>
+                        <div class="server-status">
+                            <div class="status-item">
+                                <span>Anti-Cheat Status</span>
+                                <span class="status-badge online">Online</span>
+                            </div>
+                            <div class="status-item">
+                                <span>Database Connection</span>
+                                <span class="status-badge online">Connected</span>
+                            </div>
+                            <div class="status-item">
+                                <span>Global Sync</span>
+                                <span class="status-badge online">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bans Tab -->
+            <div class="tab-content" id="bans">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-ban"></i> Ban Management</h3>
+                        <button class="btn btn-primary" onclick="showBanModal()">
+                            <i class="fas fa-plus"></i> Add Ban
+                        </button>
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" id="banSearch" placeholder="Search bans..." onkeyup="filterBans(this.value)">
+                        <select id="banFilter" onchange="filterBansByType(this.value)">
+                            <option value="all">All Bans</option>
+                            <option value="active">Active</option>
+                            <option value="expired">Expired</option>
+                            <option value="auto">Auto</option>
+                            <option value="manual">Manual</option>
+                        </select>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="bansTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">License</th>
+                                    <th scope="col">Reason</th>
+                                    <th scope="col">Duration</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>license:xxxxxxxxx...</td>
+                                    <td>Speed hacking - detected multiple violations</td>
+                                    <td>1 Week</td>
+                                    <td><span class="status-badge warning">Auto</span></td>
+                                    <td>2024-01-13</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger" onclick="removeBan(1)">
+                                            <i class="fas fa-trash"></i> Remove
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>license:yyyyyyyyy...</td>
+                                    <td>Aimbot detection</td>
+                                    <td>1 Month</td>
+                                    <td><span class="status-badge warning">Auto</span></td>
+                                    <td>2024-01-12</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger" onclick="removeBan(2)">
+                                            <i class="fas fa-trash"></i> Remove
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>license:zzzzzzzzz...</td>
+                                    <td>Manual ban - cheating</td>
+                                    <td>Permanent</td>
+                                    <td><span class="status-badge">Manual</span></td>
+                                    <td>2024-01-11</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger" onclick="removeBan(3)">
+                                            <i class="fas fa-trash"></i> Remove
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Violations Tab -->
+            <div class="tab-content" id="violations">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Violation Log</h3>
+                        <button class="btn btn-secondary" onclick="clearOldViolations()">
+                            <i class="fas fa-trash"></i> Clear Old
+                        </button>
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" id="violationSearch" placeholder="Search violations..." onkeyup="filterViolations(this.value)">
+                        <select id="violationFilter" onchange="filterViolationsByType(this.value)">
+                            <option value="all">All Types</option>
+                            <option value="speed_hack">Speed Hack</option>
+                            <option value="health_hack">Health Hack</option>
+                            <option value="teleport">Teleport</option>
+                            <option value="weapon_mod">Weapon Mod</option>
+                            <option value="aimbot">Aimbot</option>
+                        </select>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="violationsTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Player</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Details</th>
+                                    <th scope="col">Count</th>
+                                    <th scope="col">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>JohnDoe</td>
+                                    <td><span class="status-badge warning">Speed Hack</span></td>
+                                    <td>Excessive speed detected (150 mph in city area)</td>
+                                    <td>3</td>
+                                    <td>2024-01-13 14:30</td>
+                                </tr>
+                                <tr>
+                                    <td>Player123</td>
+                                    <td><span class="status-badge warning">Health Hack</span></td>
+                                    <td>Health regeneration above normal rate</td>
+                                    <td>1</td>
+                                    <td>2024-01-13 13:45</td>
+                                </tr>
+                                <tr>
+                                    <td>Cheater456</td>
+                                    <td><span class="status-badge warning">Aimbot</span></td>
+                                    <td>Impossible aim patterns detected</td>
+                                    <td>2</td>
+                                    <td>2024-01-13 12:20</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Players Tab -->
+            <div class="tab-content" id="players">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-users"></i> Online Players</h3>
+                        <button class="btn btn-secondary" onclick="loadPlayers()">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" id="playerSearch" placeholder="Search players..." onkeyup="filterPlayers(this.value)">
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="playersTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">License</th>
+                                    <th scope="col">Steam</th>
+                                    <th scope="col">Ping</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>JohnDoe</td>
+                                    <td>license:zzzzzzzzz...</td>
+                                    <td>steam:zzzzzzzzz...</td>
+                                    <td>45ms</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" onclick="quickBan('license:zzzzzzzzz...', 'JohnDoe')">
+                                            <i class="fas fa-ban"></i> Ban
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Player123</td>
+                                    <td>license:aaaaaaaa...</td>
+                                    <td>N/A</td>
+                                    <td>67ms</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" onclick="quickBan('license:aaaaaaaa...', 'Player123')">
+                                            <i class="fas fa-ban"></i> Ban
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Gamer456</td>
+                                    <td>license:bbbbbbbb...</td>
+                                    <td>steam:bbbbbbbb...</td>
+                                    <td>23ms</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" onclick="quickBan('license:bbbbbbbb...', 'Gamer456')">
+                                            <i class="fas fa-ban"></i> Ban
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div class="tab-content" id="settings">
+                <div class="card">
+                    <h3><i class="fas fa-cog"></i> Anti-Cheat Settings</h3>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label for="detectionEnabled">Detection System</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="detectionEnabled" checked>
+                                <span class="slider"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="autoBanEnabled">Auto-Ban System</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="autoBanEnabled" checked>
+                                <span class="slider"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="globalBanEnabled">Global Ban Sync</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="globalBanEnabled" checked>
+                                <span class="slider"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="maxViolations">Max Violations Before Ban</label>
+                            <input type="number" id="maxViolations" value="3" min="1" max="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="defaultBanDuration">Default Ban Duration (hours)</label>
+                            <input type="number" id="defaultBanDuration" value="24" min="1" max="8760">
+                        </div>
+                        <button class="btn btn-primary" onclick="saveSettings()">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Add/Edit Ban -->
+    <div class="modal" id="banModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Ban</h3>
+                <button class="modal-close" onclick="hideBanModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="banForm" onsubmit="handleBanSubmit(event)">
+                    <div class="form-group">
+                        <label for="banLicense">License</label>
+                        <input type="text" id="banLicense" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="banSteam">Steam ID (optional)</label>
+                        <input type="text" id="banSteam">
+                    </div>
+                    <div class="form-group">
+                        <label for="banDiscord">Discord ID (optional)</label>
+                        <input type="text" id="banDiscord">
+                    </div>
+                    <div class="form-group">
+                        <label for="banReason">Reason</label>
+                        <textarea id="banReason" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="banDurationSelect">Duration (hours)</label>
+                        <select id="banDurationSelect">
+                            <option value="1">1 Hour</option>
+                            <option value="6">6 Hours</option>
+                            <option value="24" selected>1 Day</option>
+                            <option value="168">1 Week</option>
+                            <option value="720">1 Month</option>
+                            <option value="8760">Permanent</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Ban</button>
+                        <button type="button" class="btn btn-secondary" onclick="hideBanModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demo JavaScript - simplified version for offline use
+        function switchTab(tabName) {
+            // Update navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.tab === tabName) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName)?.classList.add('active');
+        }
+
+        function showBanModal() {
+            document.getElementById('banModal').classList.add('show');
+        }
+
+        function hideBanModal() {
+            document.getElementById('banModal').classList.remove('show');
+        }
+
+        function handleBanSubmit(event) {
+            event.preventDefault();
+            alert('Demo: Ban would be created in real system');
+            hideBanModal();
+        }
+
+        function removeBan(banId) {
+            if (confirm('Are you sure you want to remove this ban?')) {
+                alert('Demo: Ban ' + banId + ' would be removed in real system');
+            }
+        }
+
+        function quickBan(license, playerName) {
+            document.getElementById('banLicense').value = license;
+            document.getElementById('banReason').value = 'Quick ban from dashboard - ' + playerName;
+            showBanModal();
+        }
+
+        function filterBans(searchTerm) {
+            const rows = document.querySelectorAll('#bansTable tbody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm.toLowerCase()) ? '' : 'none';
+            });
+        }
+
+        function filterBansByType(type) {
+            const rows = document.querySelectorAll('#bansTable tbody tr');
+            rows.forEach(row => {
+                if (type === 'all') {
+                    row.style.display = '';
+                } else {
+                    const typeCell = row.querySelector('td:nth-child(5) .status-badge');
+                    row.style.display = typeCell && typeCell.textContent.toLowerCase() === type ? '' : 'none';
+                }
+            });
+        }
+
+        function filterViolations(searchTerm) {
+            const rows = document.querySelectorAll('#violationsTable tbody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm.toLowerCase()) ? '' : 'none';
+            });
+        }
+
+        function filterViolationsByType(type) {
+            const rows = document.querySelectorAll('#violationsTable tbody tr');
+            rows.forEach(row => {
+                if (type === 'all') {
+                    row.style.display = '';
+                } else {
+                    const typeCell = row.querySelector('td:nth-child(2) .status-badge');
+                    row.style.display = typeCell && typeCell.textContent.toLowerCase().includes(type.replace('_', ' ')) ? '' : 'none';
+                }
+            });
+        }
+
+        function filterPlayers(searchTerm) {
+            const rows = document.querySelectorAll('#playersTable tbody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm.toLowerCase()) ? '' : 'none';
+            });
+        }
+
+        function loadPlayers() {
+            alert('Demo: Players would be refreshed from server');
+        }
+
+        function clearOldViolations() {
+            if (confirm('Are you sure you want to clear old violations (older than 30 days)?')) {
+                alert('Demo: Old violations would be cleared in real system');
+            }
+        }
+
+        function saveSettings() {
+            alert('Demo: Settings would be saved to server');
+        }
+
+        // Close modal on outside click
+        document.getElementById('banModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideBanModal();
+            }
+        });
+
+        // Simulate real-time updates
+        setInterval(() => {
+            // Update player count
+            const players = document.getElementById('onlinePlayers');
+            if (players) {
+                const current = parseInt(players.textContent);
+                const change = Math.floor(Math.random() * 5) - 2;
+                players.textContent = Math.max(0, current + change);
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
